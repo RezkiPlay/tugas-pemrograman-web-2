@@ -10,17 +10,22 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    
     public function index()
-    {
-        //
-    }
+{
+        return view('product.index', [
+            'title'    => 'Product',
+            'products' => Product::all(),
+    ]);
+}
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('product.create', ['title' => 'Create Product']);
     }
 
     /**
