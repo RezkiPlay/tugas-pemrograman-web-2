@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -17,7 +18,7 @@ class ProductController extends Controller
         return view('product.index', [
             'title'    => 'Product',
             'products' => Product::all(),
-    ]);
+        ]);
 }
 
     /**
@@ -111,6 +112,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete($product);
+
+    return to_route('product.index')->withSuccess( 'Product berhasil dihapus!');;
     }
 }

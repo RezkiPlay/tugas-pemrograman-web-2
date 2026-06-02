@@ -15,6 +15,13 @@
             <li class="list-group-item">
                 {{ $loop->iteration }}.{{ $product->name }}- Rp.{{ $product->price }}--{{ $product->stock }}
                 <a class="btn btn-warning btn-sm " href="{{ route('product.edit', $product) }}" role="button">edit</a>
+                <form action="{{ route('product.destroy', $product) }}" method="POST" class="d-inline">
+                    @method('DELETE')
+                    @csrf
+
+                    <button type="submit" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Anda Yakin?')">Delete</button>
+                </form>
             </li>
         @endforeach
     </ul>
