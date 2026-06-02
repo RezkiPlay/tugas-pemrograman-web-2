@@ -71,7 +71,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('product.edit', [
+        'title'   => 'Edit Product',
+        'product' => $product, // Mengirim data produk yang mau diedit
+        'units'   => ['pcs', 'kg', 'liter', 'box', 'lusin'],
+    ]);
     }
 
     /**
@@ -79,7 +83,27 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        // Validasi data produk
+    $validated = $request->validate([
+        'name'        => 'required|max:255',
+        'price'       => 'required|numeric',
+        'stock'       => 'required|numeric',
+        'description' => 'required',
+        'unit'        => 'required',
+    ],[
+        'name.required' => 'Nama Product tidak boleh kosong',
+        'name.max' => 'Nama Product tidak boleh lebih dari :max karakter',
+        'price.required' => 'Price Product tidak boleh kosong',
+        'price.numeric' => 'Price Product harus nomor',
+        'stock.required' => 'Stock Product tidak boleh kosong',
+        'stock.numeric' => 'Stock Product harus nomor',
+        'description.required' => 'Description Product tidak boleh kosong',
+        'unit.required' => 'Unit Product tidak boleh kosong',
+    ]); 
+
+    $product->update($validated);
+
+    return to_route('product.index')->with('success', 'Product berhasil diubah!');;
     }
 
     /**

@@ -12,8 +12,12 @@
 
     <ul class="list-group">
         @foreach ($products as $product)
-            <li class="list-group-item">{{ $loop->iteration }}.{{ $product->name }}
-                --{{ $product->price }}--{{ $product->stock }}</li>
+            <li class="list-group-item">
+                {{ $loop->iteration }}.{{ $product->name }}- Rp.{{ $product->price }}--{{ $product->stock }}
+                <a class="btn btn-warning btn-sm " href="{{ route('product.edit', $product) }}" role="button">edit</a>
+            </li>
         @endforeach
     </ul>
+
+    <a class="btn btn-primary mb-3" href="{{ route('product.create') }}" role="button">Create</a>
 </x-app>
