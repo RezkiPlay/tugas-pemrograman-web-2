@@ -14,13 +14,24 @@ class ProductController extends Controller
      */
 
     
-    public function index()
-{
+    public function index(Request $request)
+    {
+        $products = Product::with('category')
+            ->when($request->search, fn($q) =>
+                $q->where('name', 'like', '%' . $request->search . '%')
+            )
+            ->when($request->category_id, fn($q) =>
+                $q->where('category_id', $request->category_id)
+            )
+            ->paginate(10)
+            ->withQueryString();
+
         return view('product.index', [
-            'title'    => 'Product',
-            'products' => Product::all(),
+            'title'      => 'Daftar Produk',
+            'products'   => $products,
+            'categories' => Category::all(),
         ]);
-}
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -71,7 +82,10 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return view('product.show', [
+            'title'   => 'Detail Product',
+            'product' => $product->load('category'),
+        ]);
     }
 
     /**
@@ -124,6 +138,7 @@ class ProductController extends Controller
     {
         $product->delete($product);
 
-    return to_route('product.index')->withSuccess( 'Product berhasil dihapus!');;
+    return to_route('product.index')->with('success', 'Product berhasil dihapus!');
+
     }
 }
