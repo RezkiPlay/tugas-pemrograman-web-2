@@ -1,58 +1,66 @@
 <x-app>
-
     <x-slot:title>{{ $title }}</x-slot>
 
     <form method="POST" action="{{ route('product.update', $product) }}">
         @csrf
         @method('PUT')
-        <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id">
-            <option value="" disabled>-- Pilih Kategori --</option>
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}"
-                    {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
-                    {{ $category->name }}
-                </option>
-            @endforeach
-        </select>
-        @error('category_id')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+
         <div class="mb-3">
-            <label for="name" class="form-label">Product name</label>
-            <input type="text" class="form-control @error('name') is-invalid @enderror " id="name"
-                name="name" value="{{ old('name', $product->name) }}">
+            <label for="category_id" class="form-label">Category</label>
+            <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id">
+                <option value="" disabled>-- Pilih Kategori --</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}"
+                        {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('category_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Product Name</label>
+            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
+                value="{{ old('name', $product->name) }}">
             @error('name')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+
         <div class="mb-3">
-            <label for="price" class="form-label">Product price</label>
+            <label for="price" class="form-label">Price</label>
             <input type="number" class="form-control @error('price') is-invalid @enderror" id="price"
                 name="price" value="{{ old('price', $product->price) }}">
             @error('price')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+
         <div class="mb-3">
-            <label for="stock" class="form-label">Product stock</label>
+            <label for="stock" class="form-label">Stock</label>
             <input type="number" class="form-control @error('stock') is-invalid @enderror" id="stock"
                 name="stock" value="{{ old('stock', $product->stock) }}">
             @error('stock')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+
         <div class="mb-3">
-            <label for="description" class="form-label">Product description </label>
-            <input type="text" class="form-control @error('description') is-invalid @enderror" id="description"
-                name="description" value="{{ old('description', $product->description) }}">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                rows="3">{{ old('description', $product->description) }}</textarea>
             @error('description')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+
         <div class="mb-3">
-            <label for="unit" class="form-label">Product unit</label>
+            <label for="unit" class="form-label">Unit</label>
             <select class="form-select @error('unit') is-invalid @enderror" id="unit" name="unit">
-                <option value="" disabled selected>-- Pilih Satuan --</option>
+                <option value="" disabled>-- Pilih Satuan --</option>
                 @foreach ($units as $unit)
                     <option value="{{ $unit }}" {{ old('unit', $product->unit) == $unit ? 'selected' : '' }}>
                         {{ $unit }}
@@ -64,8 +72,7 @@
             @enderror
         </div>
 
-
-        <a class="btn btn-primary" href="{{ route('product.index') }}" role="button">Cancel</a>
-        <button type="submit" class="btn btn-warning">Submit</button>
+        <a class="btn btn-secondary" href="{{ route('product.index') }}" role="button">Cancel</a>
+        <button type="submit" class="btn btn-warning">Update</button>
     </form>
 </x-app>
