@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->integer('price');
-        $table->integer('stock');
-        $table->text('description');
-        $table->string('unit'); // satuan: pcs, kg, liter, dll
-        $table->timestamps();
-    });
+            $table->id();
+            // Menghubungkan produk ke tabel categories. Jika kategori dihapus, produknya ikut terhapus.
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->integer('price');
+            $table->integer('stock');
+            $table->text('description')->nullable();
+            $table->string('unit')->default('pcs');
+            $table->timestamps();
+        });
     }
 
     /**

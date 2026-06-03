@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
@@ -26,31 +27,37 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create', ['title' => 'Create Product',
-        'units' => ['pcs', 'kg', 'liter', 'box', 'lusin'],]);
+        return view('product.create', [
+        'title'      => 'Create Product',
+        'units'      => ['pcs', 'kg', 'liter', 'box', 'lusin'],
+        'categories' => Category::all(), // ← tambahkan ini
+    ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
+    {
     // Validasi data produk
     $validated = $request->validate([
+        'category_id' => 'required|exists:categories,id', // ← tambahkan ini
         'name'        => 'required|max:255',
         'price'       => 'required|numeric',
         'stock'       => 'required|numeric',
         'description' => 'required',
         'unit'        => 'required',
-    ],[
-        'name.required' => 'Nama Product tidak boleh kosong',
-        'name.max' => 'Nama Product tidak boleh lebih dari :max karakter',
-        'price.required' => 'Price Product tidak boleh kosong',
-        'price.numeric' => 'Price Product harus nomor',
-        'stock.required' => 'Stock Product tidak boleh kosong',
-        'stock.numeric' => 'Stock Product harus nomor',
+    ], [
+        'category_id.required' => 'Kategori tidak boleh kosong',
+        'category_id.exists'   => 'Kategori tidak valid',
+        'name.required'        => 'Nama Product tidak boleh kosong',
+        'name.max'             => 'Nama Product tidak boleh lebih dari :max karakter',
+        'price.required'       => 'Price Product tidak boleh kosong',
+        'price.numeric'        => 'Price Product harus nomor',
+        'stock.required'       => 'Stock Product tidak boleh kosong',
+        'stock.numeric'        => 'Stock Product harus nomor',
         'description.required' => 'Description Product tidak boleh kosong',
-        'unit.required' => 'Unit Product tidak boleh kosong',
+        'unit.required'        => 'Unit Product tidak boleh kosong',
     ]); 
 
     Product::create($validated);
@@ -73,9 +80,10 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return view('product.edit', [
-        'title'   => 'Edit Product',
-        'product' => $product, // Mengirim data produk yang mau diedit
-        'units'   => ['pcs', 'kg', 'liter', 'box', 'lusin'],
+        'title'      => 'Edit Product',
+        'product'    => $product,
+        'units'      => ['pcs', 'kg', 'liter', 'box', 'lusin'],
+        'categories' => Category::all(), // ← tambahkan
     ]);
     }
 
@@ -86,12 +94,14 @@ class ProductController extends Controller
     {
         // Validasi data produk
     $validated = $request->validate([
+        'category_id' => 'required|exists:categories,id',
         'name'        => 'required|max:255',
         'price'       => 'required|numeric',
         'stock'       => 'required|numeric',
         'description' => 'required',
         'unit'        => 'required',
     ],[
+        'category.id' => 'Category Harus Ada',
         'name.required' => 'Nama Product tidak boleh kosong',
         'name.max' => 'Nama Product tidak boleh lebih dari :max karakter',
         'price.required' => 'Price Product tidak boleh kosong',

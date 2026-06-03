@@ -25,6 +25,4 @@
             </li>
         @endforeach
     </ul>
-
-    <a class="btn btn-primary mb-3" href="{{ route('product.create') }}" role="button">Create</a>
 </x-app>

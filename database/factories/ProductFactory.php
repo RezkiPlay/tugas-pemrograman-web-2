@@ -18,11 +18,13 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'        => fake()->words(2, true),
-            'price'       => fake()->numberBetween(5000, 500000),
-            'stock'       => fake()->numberBetween(1, 100),
-            'description' => fake()->paragraph(),
-            'unit'        => fake()->randomElement(['pcs', 'kg', 'liter', 'box', 'lusin']),
+            // Memanggil langsung path absolut Model Category agar tidak nyasar ke folder factory
+            'category_id' => \App\Models\Category::inRandomOrder()->first()?->id ?? \App\Models\Category::factory(),
+            'name' => $this->faker->words(2, true),
+            'price' => $this->faker->numberBetween(10000, 500000),
+            'stock' => $this->faker->numberBetween(5, 100),
+            'description' => $this->faker->paragraph(),
+            'unit' => $this->faker->randomElement(['pcs', 'pack', 'kg', 'liter']),
         ];
     }
 }
