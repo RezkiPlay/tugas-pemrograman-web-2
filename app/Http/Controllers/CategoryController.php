@@ -85,7 +85,6 @@ class CategoryController extends Controller
         return to_route('category.index')->with('success', 'Kategori berhasil diupdate!');
     }
 
-    // ✅ Tambahkan
     public function destroy(Category $category)
     {
         $category->delete($category);
