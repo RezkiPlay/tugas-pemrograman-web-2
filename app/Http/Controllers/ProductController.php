@@ -135,10 +135,8 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Product $product)
-    {
-        $product->delete($product);
-
+{
+    $product->delete($product);
     return to_route('product.index')->with('success', 'Product berhasil dihapus!');
-
-    }
+}
 }
