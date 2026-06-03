@@ -37,7 +37,13 @@ class CategoryController extends Controller
             'name'        => 'required|max:255',
             'slug'        => 'required|unique:categories|max:255',
             'description' => 'required',
-        ]);
+        ],
+        [
+        'name.required'        => 'Nama kategori tidak boleh kosong',
+        'slug.required'        => 'Slug tidak boleh kosong',
+        'slug.unique'          => 'Slug sudah dipakai, gunakan yang lain',
+        'description.required' => 'Deskripsi tidak boleh kosong',
+    ]);
 
         Category::create($validated);
         return to_route('category.index')->with('success', 'Kategori berhasil ditambahkan!');

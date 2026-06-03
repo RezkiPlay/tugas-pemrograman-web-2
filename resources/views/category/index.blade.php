@@ -7,7 +7,6 @@
 
     <a class="btn btn-success mb-3" href="{{ route('category.create') }}" role="button">+ Create</a>
 
-    {{-- Search --}}
     <form method="GET" action="{{ route('category.index') }}" class="mb-3 d-flex gap-2">
         <input type="text" name="search" class="form-control" placeholder="Cari kategori..."
             value="{{ request('search') }}">
@@ -19,7 +18,9 @@
         @foreach ($categories as $category)
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span>
-                    {{ $loop->iteration }}. {{ $category->name }} - {{ $category->slug }}
+                    {{-- ✅ Nomor urut tidak reset tiap halaman --}}
+                    {{ $categories->firstItem() + $loop->index }}.
+                    {{ $category->name }} - {{ $category->slug }}
                 </span>
                 <div class="d-flex gap-1">
                     <a class="btn btn-info btn-sm" href="{{ route('category.show', $category) }}">Detail</a>
@@ -35,7 +36,6 @@
         @endforeach
     </ul>
 
-    {{-- Pagination --}}
     <div class="mt-3">
         {{ $categories->links() }}
     </div>
