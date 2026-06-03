@@ -74,7 +74,12 @@ class CategoryController extends Controller
             'name'        => 'required|max:255',
             'slug'        => 'required|max:255|unique:categories,slug,' . $category->id,
             'description' => 'required',
-        ]);
+        ], [
+        'name.required'        => 'Nama kategori tidak boleh kosong',
+        'slug.required'        => 'Slug tidak boleh kosong',
+        'slug.unique'          => 'Slug sudah dipakai, gunakan yang lain',
+        'description.required' => 'Deskripsi tidak boleh kosong',
+    ]);
 
         $category->update($validated);
         return to_route('category.index')->with('success', 'Kategori berhasil diupdate!');
