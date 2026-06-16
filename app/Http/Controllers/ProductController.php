@@ -158,4 +158,24 @@ class ProductController extends Controller
     $product->delete($product);
     return to_route('product.index')->with('success', 'Product berhasil dihapus!');
 }
+
+// Commit 5 - Halaman Trash
+public function trash()
+{
+    $products = Product::onlyTrashed()
+        ->with(['category', 'supplier'])
+        ->paginate(10);
+
+    return view('product.trash', [
+        'title'    => 'Trash Product',
+        'products' => $products,
+    ]);
+}
+
+// Commit 6 - Restore
+public function restore($id)
+{
+    Product::onlyTrashed()->findOrFail($id)->restore();
+    return to_route('product.trash')->with('success', 'Product berhasil direstore!');
+}
 }
