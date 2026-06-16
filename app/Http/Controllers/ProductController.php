@@ -178,4 +178,11 @@ public function restore($id)
     Product::onlyTrashed()->findOrFail($id)->restore();
     return to_route('product.trash')->with('success', 'Product berhasil direstore!');
 }
+
+// Commit 7 - Force Delete
+public function forceDelete($id)
+{
+    Product::onlyTrashed()->findOrFail($id)->forceDelete();
+    return to_route('product.trash')->with('success', 'Product berhasil dihapus permanen!');
+}
 }
