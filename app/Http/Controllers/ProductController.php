@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Category;
+use App\Models\Supplier;
 
 class ProductController extends Controller
 {
@@ -37,13 +38,14 @@ class ProductController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        return view('product.create', [
+{
+    return view('product.create', [
         'title'      => 'Create Product',
         'units'      => ['pcs', 'kg', 'liter', 'box', 'lusin'],
-        'categories' => Category::all(), // ← tambahkan ini
+        'categories' => Category::all(),
+        'suppliers'  => Supplier::all(), // ← tambahkan
     ]);
-    }
+}
 
     /**
      * Store a newly created resource in storage.
@@ -52,7 +54,8 @@ class ProductController extends Controller
     {
     // Validasi data produk
     $validated = $request->validate([
-        'category_id' => 'required|exists:categories,id', // ← tambahkan ini
+        'category_id' => 'required|exists:categories,id',
+        'supplier_id' => 'required|exists:suppliers,id', // ← tambahkan
         'name'        => 'required|max:255',
         'price'       => 'required|numeric',
         'stock'       => 'required|numeric',
@@ -72,7 +75,6 @@ class ProductController extends Controller
     ]); 
 
     Product::create($validated);
-
     return to_route('product.index')->with('success', 'Product berhasil ditambahkan!');;
 
 }
@@ -97,7 +99,8 @@ class ProductController extends Controller
         'title'      => 'Edit Product',
         'product'    => $product,
         'units'      => ['pcs', 'kg', 'liter', 'box', 'lusin'],
-        'categories' => Category::all(), // ← tambahkan
+        'categories' => Category::all(),
+        'suppliers'  => Supplier::all(), // ← tambahkan
     ]);
     }
 
@@ -109,6 +112,7 @@ class ProductController extends Controller
         // Validasi data produk
     $validated = $request->validate([
         'category_id' => 'required|exists:categories,id',
+        'supplier_id' => 'required|exists:suppliers,id',
         'name'        => 'required|max:255',
         'price'       => 'required|numeric',
         'stock'       => 'required|numeric',
@@ -116,6 +120,7 @@ class ProductController extends Controller
         'unit'        => 'required',
     ],[
         'category.id' => 'Category Harus Ada',
+        'supplier_id.required' => 'Supplier tidak boleh kosong',
         'name.required' => 'Nama Product tidak boleh kosong',
         'name.max' => 'Nama Product tidak boleh lebih dari :max karakter',
         'price.required' => 'Price Product tidak boleh kosong',
@@ -127,7 +132,6 @@ class ProductController extends Controller
     ]); 
 
     $product->update($validated);
-
     return to_route('product.index')->with('success', 'Product berhasil diubah!');;
     }
 

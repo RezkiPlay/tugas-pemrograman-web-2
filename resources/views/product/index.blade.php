@@ -6,6 +6,7 @@
     @endsession
 
     <a class="btn btn-success mb-3" href="{{ route('product.create') }}" role="button">+ Create</a>
+    <a class="btn btn-dark mb-3" href="{{ route('category.index') }}" role="button">Category</a>
 
     {{-- Search & Filter --}}
     <form method="GET" action="{{ route('product.index') }}" class="mb-3 d-flex gap-2">

@@ -72,6 +72,22 @@
             @enderror
         </div>
 
+        <div class="mb-3">
+            <label for="supplier_id" class="form-label">Supplier</label>
+            <select class="form-select @error('supplier_id') is-invalid @enderror" id="supplier_id" name="supplier_id">
+                <option value="" disabled selected>-- Pilih Supplier --</option>
+                @foreach ($suppliers as $supplier)
+                    <option value="{{ $supplier->id }}"
+                        {{ old('supplier_id', $product->supplier_id) == $supplier->id ? 'selected' : '' }}>
+                        {{ $supplier->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('supplier_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
         <a class="btn btn-secondary" href="{{ route('product.index') }}" role="button">Cancel</a>
         <button type="submit" class="btn btn-warning">Update</button>
     </form>

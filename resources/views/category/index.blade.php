@@ -6,6 +6,7 @@
     @endsession
 
     <a class="btn btn-success mb-3" href="{{ route('category.create') }}" role="button">+ Create</a>
+    <a class="btn btn-dark mb-3" href="{{ route('product.index') }}" role="button">Product</a>
 
     <form method="GET" action="{{ route('category.index') }}" class="mb-3 d-flex gap-2">
         <input type="text" name="search" class="form-control" placeholder="Cari kategori..."
@@ -22,7 +23,7 @@
                     {{ $categories->firstItem() + $loop->index }}.
                     {{ $category->name }} - {{ $category->slug }}
                 </span>
-                <div class="d-flex gap-1">
+                <div class="d-flex gap-2">
                     <a class="btn btn-info btn-sm" href="{{ route('category.show', $category) }}">Detail</a>
                     <a class="btn btn-warning btn-sm" href="{{ route('category.edit', $category) }}">Edit</a>
                     <form action="{{ route('category.destroy', $category) }}" method="POST" class="d-inline">
