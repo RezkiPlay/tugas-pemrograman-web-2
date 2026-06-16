@@ -7,7 +7,6 @@
 
     <div class="d-flex gap-2 mb-3">
         <a class="btn btn-success" href="{{ route('product.create') }}">+ Create</a>
-        <a class="btn btn-danger" href="{{ route('product.trash') }}">🗑 Trash</a>
     </div>
 
     <form method="GET" action="{{ route('product.index') }}" class="mb-3 d-flex gap-2">

@@ -1,6 +1,10 @@
 <x-app>
     <x-slot:title>{{ $title }}</x-slot>
 
+    @session('error')
+        <div class="alert alert-danger">{{ $value }}</div>
+    @endsession
+
     <form method="POST" action="{{ route('product.store') }}">
         @csrf
 
@@ -20,10 +24,35 @@
         </div>
 
         <div class="mb-3">
+            <label for="supplier_id" class="form-label">Supplier</label>
+            <select class="form-select @error('supplier_id') is-invalid @enderror" id="supplier_id" name="supplier_id">
+                <option value="" disabled selected>-- Pilih Supplier --</option>
+                @foreach ($suppliers as $supplier)
+                    <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                        {{ $supplier->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('supplier_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
             <label for="name" class="form-label">Product Name</label>
             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
                 value="{{ old('name') }}">
             @error('name')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        {{-- ← Field brand baru --}}
+        <div class="mb-3">
+            <label for="brand" class="form-label">Brand <small class="text-muted">(opsional)</small></label>
+            <input type="text" class="form-control @error('brand') is-invalid @enderror" id="brand"
+                name="brand" value="{{ old('brand') }}" placeholder="Contoh: Samsung, Nike, dll">
+            @error('brand')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
@@ -70,22 +99,7 @@
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label for="supplier_id" class="form-label">Supplier</label>
-            <select class="form-select @error('supplier_id') is-invalid @enderror" id="supplier_id" name="supplier_id">
-                <option value="" disabled selected>-- Pilih Supplier --</option>
-                @foreach ($suppliers as $supplier)
-                    <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
-                        {{ $supplier->name }}
-                    </option>
-                @endforeach
-            </select>
-            @error('supplier_id')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <a class="btn btn-secondary" href="{{ route('product.index') }}" role="button">Cancel</a>
+        <a class="btn btn-secondary" href="{{ route('product.index') }}">Cancel</a>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </x-app>
