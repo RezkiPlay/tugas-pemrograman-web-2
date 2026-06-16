@@ -5,14 +5,14 @@
         <div class="alert alert-success">{{ $value }}</div>
     @endsession
 
-    <a class="btn btn-success mb-3" href="{{ route('product.create') }}" role="button">+ Create</a>
-    <a class="btn btn-dark mb-3" href="{{ route('category.index') }}" role="button">Category</a>
+    <div class="d-flex gap-2 mb-3">
+        <a class="btn btn-success" href="{{ route('product.create') }}">+ Create</a>
+        <a class="btn btn-danger" href="{{ route('product.trash') }}">🗑 Trash</a>
+    </div>
 
-    {{-- Search & Filter --}}
     <form method="GET" action="{{ route('product.index') }}" class="mb-3 d-flex gap-2">
         <input type="text" name="search" class="form-control" placeholder="Cari produk..."
             value="{{ request('search') }}">
-
         <select name="category_id" class="form-select">
             <option value="">Semua Kategori</option>
             @foreach ($categories as $category)
@@ -21,7 +21,6 @@
                 </option>
             @endforeach
         </select>
-
         <button class="btn btn-primary">Cari</button>
         <a href="{{ route('product.index') }}" class="btn btn-secondary">Reset</a>
     </form>
@@ -32,6 +31,9 @@
                 <span>
                     {{ $products->firstItem() + $loop->index }}.
                     {{ $product->name }}
+                    @if ($product->brand)
+                        <span class="badge bg-info">{{ $product->brand }}</span>
+                    @endif
                     <span class="badge bg-secondary">{{ $product->category->name }}</span>
                     - Rp{{ number_format($product->price) }}
                     - Stok: {{ $product->stock }}
@@ -50,8 +52,5 @@
         @endforeach
     </ul>
 
-    {{-- Pagination --}}
-    <div class="mt-3">
-        {{ $products->links() }}
-    </div>
+    <div class="mt-3">{{ $products->links() }}</div>
 </x-app>
