@@ -102,46 +102,53 @@ class ProductController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Product $product)
-    {
-        return view('product.edit', [
+{
+    return view('product.edit', [
         'title'      => 'Edit Product',
         'product'    => $product,
         'units'      => ['pcs', 'kg', 'liter', 'box', 'lusin'],
         'categories' => Category::all(),
-        'suppliers'  => Supplier::all(), // ← tambahkan
+        'suppliers'  => Supplier::all(),
     ]);
-    }
+}
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Product $product)
-    {
-        // Validasi data produk
+{
     $validated = $request->validate([
         'category_id' => 'required|exists:categories,id',
         'supplier_id' => 'required|exists:suppliers,id',
         'name'        => 'required|max:255',
+        'brand'       => 'nullable|max:255',
         'price'       => 'required|numeric',
         'stock'       => 'required|numeric',
         'description' => 'required',
         'unit'        => 'required',
-    ],[
-        'category.id' => 'Category Harus Ada',
+    ], [
+        'category_id.required' => 'Kategori tidak boleh kosong',
         'supplier_id.required' => 'Supplier tidak boleh kosong',
-        'name.required' => 'Nama Product tidak boleh kosong',
-        'name.max' => 'Nama Product tidak boleh lebih dari :max karakter',
-        'price.required' => 'Price Product tidak boleh kosong',
-        'price.numeric' => 'Price Product harus nomor',
-        'stock.required' => 'Stock Product tidak boleh kosong',
-        'stock.numeric' => 'Stock Product harus nomor',
-        'description.required' => 'Description Product tidak boleh kosong',
-        'unit.required' => 'Unit Product tidak boleh kosong',
-    ]); 
+        'name.required'        => 'Nama Product tidak boleh kosong',
+        'name.max'             => 'Nama tidak boleh lebih dari :max karakter',
+        'price.required'       => 'Harga tidak boleh kosong',
+        'price.numeric'        => 'Harga harus berupa angka',
+        'stock.required'       => 'Stok tidak boleh kosong',
+        'stock.numeric'        => 'Stok harus berupa angka',
+        'description.required' => 'Deskripsi tidak boleh kosong',
+        'unit.required'        => 'Unit tidak boleh kosong',
+    ]);
 
-    $product->update($validated);
-    return to_route('product.index')->with('success', 'Product berhasil diubah!');;
+    DB::beginTransaction();
+    try {
+        $product->update($validated);
+        DB::commit();
+        return to_route('product.index')->with('success', 'Product berhasil diubah!');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with('error', 'Gagal mengubah product: ' . $e->getMessage());
     }
+}
 
     /**
      * Remove the specified resource from storage.
